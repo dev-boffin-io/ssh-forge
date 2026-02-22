@@ -8,7 +8,7 @@ gui/sshx-gui
 bin/sshx
 sshx-dev
 bin/sshx-key
-bin/sshx-stream
+bin/scpx
 
 # Built lib binaries
 !/lib/
