@@ -299,7 +299,7 @@ if [[ "$INSTALL_BUILD" == true ]]; then
   install_pkgs "${BUILD[@]}"
 fi
 
-# ---------------- Build Trigger ----------------
+# ---------------- App Build Trigger ----------------
 
 echo ""
 echo "----------------------------------------"

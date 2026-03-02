@@ -74,8 +74,8 @@ run() {
 # ---------------- Paths ----------------
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILD="$PROJECT_ROOT/build"
 GUI="$PROJECT_ROOT/gui"
-LIB="$PROJECT_ROOT/lib"
 BIN="$PROJECT_ROOT/bin"
 
 echo "📁 Project root: $PROJECT_ROOT"
@@ -93,33 +93,32 @@ echo "📦 Checking build dependencies..."
 
 need go
 
-echo "✅ required dependencies found."
+echo "✅ Required dependencies found."
 
 # ---------------- Clean Old Binaries ----------------
 
 echo "🧹 Removing old binaries..."
 
 run mkdir -p "$BIN"
-run mkdir -p "$LIB"
 
 if [[ "$CLI_ONLY" == false ]]; then
   run rm -f "$BIN/sshx" \
-             "$PROJECT_ROOT/sshx-dev" \
              "$BIN/sshx-key" \
              "$BIN/scpx" \
-             "$GUI/sshx-gui" \
-             "$LIB/git-auth" \
-             "$LIB/sshx-cpy" \
-             "$LIB/sshx-reset"
+             "$BIN/git-auth" \
+             "$BIN/sshx-cpy" \
+             "$BIN/sshx-reset" \
+             "$PROJECT_ROOT/sshx-dev" \
+             "$GUI/sshx-gui"
   run rm -rf "$GUI/_internal"
 else
   run rm -f "$BIN/sshx" \
-             "$PROJECT_ROOT/sshx-dev" \
              "$BIN/sshx-key" \
              "$BIN/scpx" \
-             "$LIB/git-auth" \
-             "$LIB/sshx-cpy" \
-             "$LIB/sshx-reset"
+             "$BIN/git-auth" \
+             "$BIN/sshx-cpy" \
+             "$BIN/sshx-reset" \
+             "$PROJECT_ROOT/sshx-dev"
 fi
 
 # ---------------- Build Go Binaries ----------------
@@ -127,15 +126,14 @@ fi
 echo "🚀 Building core binaries..."
 
 cd "$PROJECT_ROOT"
-run ./build-bin
-run ./build-lib
-run ./build-init
+run "$BUILD/build-bin"
+run "$BUILD/build-init"
 
 # ---------------- GUI Build ----------------
 
 if [[ "$CLI_ONLY" == false ]]; then
-  echo "Starting GUI Building..."
-  run ./build-gui
+  echo "Starting GUI build..."
+  run "$BUILD/build-gui"
   cd "$PROJECT_ROOT"
 else
   echo "⏭ Skipping GUI build (--cli mode)"
@@ -150,9 +148,9 @@ common_artifacts=(
   "$BIN/sshx"
   "$BIN/sshx-key"
   "$BIN/scpx"
-  "$LIB/git-auth"
-  "$LIB/sshx-cpy"
-  "$LIB/sshx-reset"
+  "$BIN/git-auth"
+  "$BIN/sshx-cpy"
+  "$BIN/sshx-reset"
   "$PROJECT_ROOT/sshx-dev"
 )
 

@@ -32,14 +32,13 @@ def get_root_dir():
 
 ROOT_DIR = get_root_dir()
 BIN_DIR = os.path.join(ROOT_DIR, "bin")
-LIB_DIR = os.path.join(ROOT_DIR, "lib")
 
 SSHX_BIN  = os.path.join(BIN_DIR, "sshx")
 SSHX_KEY  = os.path.join(BIN_DIR, "sshx-key")
 SCPX_BIN  = os.path.join(BIN_DIR, "scpx")
-SSHX_CPY  = os.path.join(LIB_DIR, "sshx-cpy")
-GIT_AUTH  = os.path.join(LIB_DIR, "git-auth")
-SSHX_RESET = os.path.join(LIB_DIR, "sshx-reset")
+SSHX_CPY  = os.path.join(BIN_DIR, "sshx-cpy")
+GIT_AUTH  = os.path.join(BIN_DIR, "git-auth")
+SSHX_RESET = os.path.join(BIN_DIR, "sshx-reset")
 
 
 # --------------------------------------------------

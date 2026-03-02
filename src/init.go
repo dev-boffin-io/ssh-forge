@@ -12,9 +12,9 @@ var binaries = []string{
 	"bin/sshx",
 	"bin/sshx-key",
 	"bin/scpx",
-	"lib/sshx-cpy",
-	"lib/sshx-reset",
-	"lib/git-auth",
+	"bin/sshx-cpy",
+	"bin/sshx-reset",
+	"bin/git-auth",
 	"gui/sshx-gui",
 }
 

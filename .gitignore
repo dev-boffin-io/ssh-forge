@@ -9,15 +9,15 @@ bin/sshx
 sshx-dev
 bin/sshx-key
 bin/scpx
+bin/git-auth
+bin/sshx-cpy  
+bin/sshx-reset
 
 # Built lib binaries
 !/lib/
 !/lib/README.md
 lib/*.so
 lib/*.exe
-lib/git-auth
-lib/sshx-cpy  
-lib/sshx-reset
 
 # Built log
 install.log
@@ -32,7 +32,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
