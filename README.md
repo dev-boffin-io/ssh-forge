@@ -24,16 +24,29 @@ A lightweight, portable SSH management toolkit for Linux with both CLI and GTK G
 ```
 easy-ssh-dev/
 │
-├── 📁 bin/                        # Compiled CLI binaries (output)
+├── 📁 bin/                        # Compiled binaries (build output)
 │   ├── sshx                       # Main SSH manager — connect, list, doctor, menu
 │   ├── sshx-key                   # SSH key generator (ed25519)
+│   ├── sshx-cpy                   # Copies SSH public key to a remote host
+│   ├── sshx-reset                 # Cleans ~/.ssh junk files, resets known_hosts
+│   ├── git-auth                   # GitHub SSH authentication verifier & setup wizard
 │   ├── scpx                       # Secure file transfer (push/pull over SSH)
 │   └── ssh-terminal.png           # GUI icon asset
 │
-├── 📁 lib/                        # Internal helper binaries (output)
-│   ├── git-auth                   # GitHub SSH authentication verifier & setup wizard
-│   ├── sshx-cpy                   # Copies SSH public key to a remote host
-│   └── sshx-reset                 # Cleans ~/.ssh junk files, resets known_hosts
+├── 📁 src/                        # Go source files
+│   ├── main.go                    # sshx CLI — connect, list, menu, doctor, remove
+│   ├── init.go                    # Initialization — key permissions, cache check
+│   ├── sshx-key.go                # SSH key generation (ed25519 + ssh-agent)
+│   ├── sshx-cpy.go                # SSH public key installer (injection-safe)
+│   ├── sshx-reset.go              # SSH cleanup — removes *.old/*.tmp/*.bak, resets known_hosts
+│   ├── git-auth.go                # GitHub auth check, key setup wizard, browser launcher
+│   ├── scpx.go                    # SCP wrapper — recursive push/pull, IPv4/IPv6
+│   └── go.mod                     # Go module definition
+│
+├── 📁 build/                      # Build scripts
+│   ├── build-bin                  # Builds all binaries → bin/
+│   ├── build-init                 # Builds: sshx-dev (installer runner)
+│   └── build-gui                  # Builds GUI via PyInstaller → gui/sshx-gui
 │
 ├── 📁 gui/                        # GTK GUI frontend
 │   ├── easy-ssh-gui.py            # Python GTK3 + VTE GUI with tabbed terminal
@@ -43,25 +56,9 @@ easy-ssh-dev/
 ├── 📁 installer/
 │   └── install.sh                 # Dependency installer (OS-aware: apt/dnf/pacman/apk/pkg)
 │
-│── 📄 Source Files (Go)
-│   ├── main.go                    # Entry point for sshx CLI
-│   ├── init.go                    # Initialization logic (key permissions, config check)
-│   ├── sshx-key.go                # SSH key generation logic (ed25519 + ssh-agent add)
-│   ├── sshx-cpy.go                # SSH public key copy logic (ssh-copy-id equivalent)
-│   ├── sshx-reset.go              # SSH cleanup — removes *.old/*.tmp/*.bak, resets known_hosts
-│   ├── git-auth.go                # GitHub auth check, key setup wizard, browser launcher
-│   ├── scpx.go                    # SCP wrapper — push/pull with progress
-│   └── go.mod                     # Go module definition
-│
-├── 📄 Build Scripts
-│   ├── app-build-install          # Master build + install script (supports --cli, --dry-run)
-│   ├── build-bin                  # Builds: sshx, sshx-key, scpx → bin/
-│   ├── build-lib                  # Builds: git-auth, sshx-cpy, sshx-reset → lib/
-│   ├── build-init                 # Builds: sshx-dev (installer runner)
-│   └── build-gui                  # Builds GUI via PyInstaller → gui/sshx-gui
-│
 ├── sshx-dev                       # Post-build installer runner (runs `sshx-dev install`)
-├── sshx.toml                      # Config file — saved hosts & preferences
+├── app-build-install              # Master build + install script (supports --cli, --dry-run)
+├── sshx.toml                      # Project config file
 ├── install.log                    # Auto-generated installation log
 ├── LICENSE                        # Project license
 └── README.md                      # This file
@@ -69,17 +66,17 @@ easy-ssh-dev/
 
 ### Component Overview
 
-| Component | Language | Role |
-|-----------|----------|------|
-| `sshx` | Go | Core SSH manager CLI |
-| `sshx-key` | Go | SSH ed25519 key generator |
-| `scpx` | Go | Push/pull file transfer over SSH |
-| `git-auth` | Go | GitHub SSH auth verifier + guided setup wizard |
-| `sshx-cpy` | Go | Remote SSH key installer |
-| `sshx-reset` | Go | SSH dir cleanup & known_hosts reset |
-| `sshx-gui` | Python (GTK3+VTE) | Tabbed GUI terminal for all CLI tools |
-| `install.sh` | Bash | OS-aware dependency installer |
-| `app-build-install` | Bash | Full build + install orchestrator |
+| Binary | Source | Location | Role |
+|--------|--------|----------|------|
+| `sshx` | `src/main.go` | `bin/` | Core SSH manager — connect, list, menu, doctor |
+| `sshx-key` | `src/sshx-key.go` | `bin/` | SSH ed25519 key generator |
+| `scpx` | `src/scpx.go` | `bin/` | Recursive push/pull file transfer over SSH |
+| `git-auth` | `src/git-auth.go` | `bin/` | GitHub SSH auth verifier + interactive setup wizard |
+| `sshx-cpy` | `src/sshx-cpy.go` | `bin/` | Injection-safe SSH public key installer |
+| `sshx-reset` | `src/sshx-reset.go` | `bin/` | SSH dir cleanup & known_hosts reset |
+| `sshx-gui` | `gui/easy-ssh-gui.py` | `gui/` | GTK3+VTE tabbed GUI terminal |
+| `install.sh` | `installer/install.sh` | — | OS-aware dependency installer |
+| `app-build-install` | `app-build-install` | root | Full build + install orchestrator (supports `--cli`, `--dry-run`) |
 
 ---
 
