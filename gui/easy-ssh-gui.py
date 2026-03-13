@@ -495,7 +495,7 @@ class SSHXGUI(Gtk.Window):
         text = "\n".join(lines)
 
         dialog = Gtk.Dialog(title="Doctor — System Check", transient_for=self, flags=0)
-        dialog.set_default_size(620, 400)
+        dialog.set_default_size(1500, 750)
         dialog.add_buttons("Close", Gtk.ResponseType.CLOSE)
 
         box = dialog.get_content_area()
@@ -560,7 +560,7 @@ class SSHXGUI(Gtk.Window):
 
 ━━━ git-auth — GitHub SSH Auth Check ━━━━━━━━━━━━━━━━━━━━━
 
-  git-auth                       Verify GitHub SSH authentication
+  git-auth                       GitHub SSH authentication Automation
 
 ━━━ sshx-reset — Reset SSH Keys ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -574,7 +574,7 @@ class SSHXGUI(Gtk.Window):
   Right-click                    Context menu (Copy/Paste/Select All)
 """
         dialog = Gtk.Dialog(title="Help — Command Reference", transient_for=self, flags=0)
-        dialog.set_default_size(640, 560)
+        dialog.set_default_size(1800, 750)
         dialog.add_buttons("Close", Gtk.ResponseType.CLOSE)
 
         box = dialog.get_content_area()
