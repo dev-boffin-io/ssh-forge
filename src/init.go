@@ -18,7 +18,7 @@ var binaries = []string{
 	"gui/sshx-gui",
 }
 
-// uninstall করার সময় দুটো জায়গাই চেক করবে
+// Check both locations during uninstall
 var allTargetDirs = []string{
 	"/usr/local/bin",
 	filepath.Join(os.Getenv("HOME"), ".local/bin"),
@@ -84,7 +84,7 @@ func runCommand(name string, args ...string) error {
 	return cmd.Run()
 }
 
-// privilege-aware remove — system path হলে sudo, user path হলে সরাসরি
+// privilege-aware remove — sudo for system path, direct for user path
 func removeFile(path string) error {
 	if filepath.Dir(path) == "/usr/local/bin" {
 		return runCommand("rm", "-f", path)
@@ -136,11 +136,11 @@ func projectRoot() string {
 =========================== */
 
 func install() {
-	info("Installing esey-ssh-dev...")
+	info("Installing easy-ssh-dev...")
 
 	baseDir := projectRoot()
 
-	// targetDir না থাকলে তৈরি করো (proot fallback এর জন্য)
+	// Create targetDir if missing (proot / termux fallback)
 	os.MkdirAll(targetDir, 0755)
 
 	guiPath := filepath.Join(baseDir, "gui/sshx-gui")
@@ -183,11 +183,11 @@ func install() {
 
 /* ===========================
    Uninstall
-   — দুটো জায়গাই চেক করে, যেখানে পাবে মুছবে
+   — checks both locations, removes wherever found
 =========================== */
 
 func uninstall() {
-	info("Uninstalling esey-ssh-dev...")
+	info("Uninstalling easy-ssh-dev...")
 
 	removedAny := false
 
@@ -258,7 +258,7 @@ func createDesktopEntry(baseDir string) {
 
 	os.MkdirAll(desktopDir, 0755)
 
-	iconPath := filepath.Join(baseDir, "bin/ssh-terminal.png")
+	iconPath := filepath.Join(baseDir, "build/ssh-terminal.png")
 	if !fileExists(iconPath) {
 		iconPath = ""
 	}

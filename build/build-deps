@@ -230,20 +230,6 @@ if [[ "$INSTALL_CLI" == true ]]; then
     ok "CLI dependencies OK"
   fi
 
-  echo ""
-  echo "----------------------------------------"
-  log "Triggering CLI build step..."
-
-  if [[ -f "$PROJECT_ROOT/app-build-install" ]]; then
-    if [[ "$DRY_RUN" == true ]]; then
-      log "[DRY RUN] Would execute build script (CLI mode)"
-    else
-      bash "$PROJECT_ROOT/app-build-install" --cli || warn "Build step failed"
-    fi
-  else
-    warn "app-build-install not found — skipping"
-  fi
-
   echo "----------------------------------------"
   echo "Log file: $LOG_FILE"
   ok "CLI INSTALLATION COMPLETED 🚀"
@@ -297,22 +283,6 @@ fi
 if [[ "$INSTALL_BUILD" == true ]]; then
   echo "Installing build tools..."
   install_pkgs "${BUILD[@]}"
-fi
-
-# ---------------- App Build Trigger ----------------
-
-echo ""
-echo "----------------------------------------"
-log "Triggering build step..."
-
-if [[ -f "$PROJECT_ROOT/app-build-install" ]]; then
-  if [[ "$DRY_RUN" == true ]]; then
-    log "[DRY RUN] Would execute build script"
-  else
-    bash "$PROJECT_ROOT/app-build-install" || warn "Build step failed"
-  fi
-else
-  warn "app-build-install not found — skipping"
 fi
 
 echo "----------------------------------------"

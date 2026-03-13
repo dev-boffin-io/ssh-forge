@@ -56,6 +56,27 @@ parse_args() {
 
 parse_args "$@"
 
+# ---------------- Paths ----------------
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILD="$PROJECT_ROOT/build"
+GUI="$PROJECT_ROOT/gui"
+BIN="$PROJECT_ROOT/bin"
+LOG_FILE="$PROJECT_ROOT/install.log"
+
+# ---------------- Logging ----------------
+
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "========================================================="
+echo "  easy-ssh-dev — Build Script"
+echo "  Script  : app-build-install"
+echo "  Started : $(date '+%A, %d %B %Y | %I:%M:%S %p')"
+echo "  Mode    : $([ "$DRY_RUN" == true ] && echo 'DRY RUN' || echo 'LIVE') / $([ "$CLI_ONLY" == true ] && echo 'CLI ONLY' || echo 'CLI + GUI')"
+echo "  Project : $PROJECT_ROOT"
+echo "  Log     : $LOG_FILE"
+echo "========================================================="
+
 if [[ "$DRY_RUN" == true ]]; then
   echo "🧪 Running in DRY RUN mode — no changes will be made."
 fi
@@ -64,19 +85,14 @@ if [[ "$CLI_ONLY" == true ]]; then
   echo "⚙️  CLI only mode — GUI build will be skipped."
 fi
 
+# ---------------- Helpers ----------------
+
 run() {
   echo "➜ $*"
   if [[ "$DRY_RUN" != true ]]; then
     "$@"
   fi
 }
-
-# ---------------- Paths ----------------
-
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD="$PROJECT_ROOT/build"
-GUI="$PROJECT_ROOT/gui"
-BIN="$PROJECT_ROOT/bin"
 
 echo "📁 Project root: $PROJECT_ROOT"
 
