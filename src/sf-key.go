@@ -160,7 +160,7 @@ func showGitHubInstructions(pubKey string) {
 func main() {
 
 	if len(os.Args) < 2 {
-		die("Usage:\n  sshx-key setup your@email.com\n  sshx-key local your@email.com")
+		die("Usage:\n  sf-key setup your@email.com\n  sf-key local your@email.com")
 	}
 
 	mode := "setup"

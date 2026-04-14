@@ -18,7 +18,7 @@ def get_root_dir():
     """
     Detect project root in all cases:
     - Running from source
-    - Installed in /opt/easy-ssh-dev
+    - Installed in /opt/ssh-forge
     - Running from PyInstaller --onedir
     """
     if getattr(sys, "frozen", False):
@@ -30,15 +30,15 @@ def get_root_dir():
     return current_dir
 
 
-ROOT_DIR   = get_root_dir()
-BIN_DIR    = os.path.join(ROOT_DIR, "bin")
+ROOT_DIR = get_root_dir()
+BIN_DIR  = os.path.join(ROOT_DIR, "bin")
 
-SSHX_BIN   = os.path.join(BIN_DIR, "sshx")
-SSHX_KEY   = os.path.join(BIN_DIR, "sshx-key")
-SCPX_BIN   = os.path.join(BIN_DIR, "scpx")
-SSHX_CPY   = os.path.join(BIN_DIR, "sshx-cpy")
-GIT_AUTH   = os.path.join(BIN_DIR, "git-auth")
-SSHX_RESET = os.path.join(BIN_DIR, "sshx-reset")
+SSH_FORGE_BIN = os.path.join(BIN_DIR, "ssh-forge")
+SF_KEY        = os.path.join(BIN_DIR, "sf-key")
+SCPX_BIN      = os.path.join(BIN_DIR, "scpx")
+SF_CPY        = os.path.join(BIN_DIR, "sf-cpy")
+SF_GIT_AUTH   = os.path.join(BIN_DIR, "sf-git-auth")
+SF_RESET      = os.path.join(BIN_DIR, "sf-reset")
 
 
 # --------------------------------------------------
@@ -310,9 +310,9 @@ class TerminalTab(Gtk.Box):
 # Main Window
 # --------------------------------------------------
 
-class SSHXGUI(Gtk.Window):
+class SSHForgeGUI(Gtk.Window):
     def __init__(self):
-        super().__init__(title="SSHX Ultimate Professional GUI")
+        super().__init__(title="SSH Forge GUI")
         self.set_default_size(1600, 820)
         self.connect("destroy", Gtk.main_quit)
 
@@ -340,9 +340,9 @@ class SSHXGUI(Gtk.Window):
 
         # ---- Core Buttons ----
         self.add_btn(toolbar, "Connect", self.connect_popup)
-        self.add_btn(toolbar, "List",    lambda b: self.run_cmd([SSHX_BIN, "--list"],    "List"))
+        self.add_btn(toolbar, "List",    lambda b: self.run_cmd([SSH_FORGE_BIN, "--list"],    "List"))
         self.add_btn(toolbar, "Doctor",  self.show_doctor_dialog)
-        self.add_btn(toolbar, "Version", lambda b: self.run_cmd([SSHX_BIN, "--version"], "Version"))
+        self.add_btn(toolbar, "Version", lambda b: self.run_cmd([SSH_FORGE_BIN, "--version"], "Version"))
         self.add_btn(toolbar, "Help",    self.show_help_dialog)
 
         # Vertical separator
@@ -352,12 +352,12 @@ class SSHXGUI(Gtk.Window):
         toolbar.pack_start(sep, False, False, 4)
 
         # ---- Advanced Buttons ----
-        self.add_btn(toolbar, "Gen Key",          self.gen_key_popup)
+        self.add_btn(toolbar, "Gen Key",        self.gen_key_popup)
         self.add_btn(toolbar, "Copy Fingerprint", self.copy_fingerprint)
-        self.add_btn(toolbar, "Git Auth",         lambda b: self.run_cmd([GIT_AUTH],    "GitAuth"))
-        self.add_btn(toolbar, "SSHX Copy",        self.sshx_copy_popup)
-        self.add_btn(toolbar, "SSHX Reset",       lambda b: self.run_cmd([SSHX_RESET], "Reset"))
-        self.add_btn(toolbar, "SCPX",             self.scpx_popup)
+        self.add_btn(toolbar, "Git Auth",       lambda b: self.run_cmd([SF_GIT_AUTH], "GitAuth"))
+        self.add_btn(toolbar, "SF Copy",        self.sf_copy_popup)
+        self.add_btn(toolbar, "SF Reset",       lambda b: self.run_cmd([SF_RESET],    "Reset"))
+        self.add_btn(toolbar, "SCPX",           self.scpx_popup)
 
         # Open a default shell tab on startup
         self.new_tab(None, "Terminal", pinned=True)
@@ -410,7 +410,7 @@ class SSHXGUI(Gtk.Window):
     # Popups
     # --------------------------------------------------
     def connect_popup(self, button):
-        dialog = Gtk.Dialog(title="Connect to SSHX", transient_for=self, flags=0)
+        dialog = Gtk.Dialog(title="Connect — ssh-forge", transient_for=self, flags=0)
         dialog.set_default_size(440, -1)
         dialog.add_buttons("Cancel",  Gtk.ResponseType.CANCEL,
                            "Connect", Gtk.ResponseType.OK)
@@ -443,9 +443,9 @@ class SSHXGUI(Gtk.Window):
             value = entry.get_text().strip()
             if value:
                 if raw_check.get_active():
-                    self.run_cmd([SSHX_BIN, "--raw", value], f"RAW {value}")
+                    self.run_cmd([SSH_FORGE_BIN, "--raw", value], f"RAW {value}")
                 else:
-                    self.run_cmd([SSHX_BIN, value], value)
+                    self.run_cmd([SSH_FORGE_BIN, value], value)
             else:
                 self.show_error("Input cannot be empty.")
 
@@ -453,12 +453,12 @@ class SSHXGUI(Gtk.Window):
 
     def show_doctor_dialog(self, button):
         BINARIES = [
-            ("sshx",       SSHX_BIN),
-            ("sshx-key",   SSHX_KEY),
-            ("sshx-cpy",   SSHX_CPY),
+            ("ssh-forge",  SSH_FORGE_BIN),
+            ("sf-key",     SF_KEY),
+            ("sf-cpy",     SF_CPY),
             ("scpx",       SCPX_BIN),
-            ("git-auth",   GIT_AUTH),
-            ("sshx-reset", SSHX_RESET),
+            ("sf-git-auth", SF_GIT_AUTH),
+            ("sf-reset",   SF_RESET),
         ]
 
         SYS_DEPS = ["ssh", "ssh-copy-id", "ssh-keygen"]
@@ -529,49 +529,50 @@ class SSHXGUI(Gtk.Window):
     def show_help_dialog(self, button):
         HELP_TEXT = """\
 ┌─────────────────────────────────────────────────────────┐
-│                  SSHX GUI — Command Reference           │
+│               SSH Forge GUI — Command Reference         │
 └─────────────────────────────────────────────────────────┘
 
-━━━ sshx — SSH Connection Manager ━━━━━━━━━━━━━━━━━━━━━━━━
+━━━ ssh-forge — SSH Connection Manager ━━━━━━━━━━━━━━━━━━━
 
-  sshx user@ip:port              Connect (auto key-copy + cache)
-  sshx user@[ipv6]:port          Connect via IPv6
-  sshx --raw user@ip:port        Direct connect — skip cache
-  sshx user@ip:port --remove     Remove host from cache
+  ssh-forge user@ip:port              Connect (auto key-copy + cache)
+  ssh-forge user@[ipv6]:port          Connect via IPv6
+  ssh-forge --raw user@ip:port        Direct connect — skip cache
+  ssh-forge user@ip:port --remove     Remove host from cache
 
-  sshx --list                    List saved hosts
-  sshx --menu                    Interactive fzf menu
-  sshx --doctor                  Check dependencies
-  sshx --version                 Show version
+  ssh-forge --list                    List saved hosts
+  ssh-forge --menu                    Interactive fzf menu
+  ssh-forge --doctor                  Check dependencies
+  ssh-forge --version                 Show version
 
-━━━ sshx-key — GitHub SSH Key Setup ━━━━━━━━━━━━━━━━━━━━━━
+━━━ sf-key — GitHub SSH Key Setup ━━━━━━━━━━━━━━━━━━━━━━━━
 
-  sshx-key user@email.com        Generate key, add to agent,
-                                 copy pubkey to clipboard
+  sf-key user@email.com               Generate key, add to agent,
+                                      copy pubkey to clipboard
+  sf-key local user@email.com         Local key only (no GitHub steps)
 
-━━━ sshx-cpy — Copy SSH Public Key to Remote Host ━━━━━━━━
+━━━ sf-cpy — Copy SSH Public Key to Remote Host ━━━━━━━━━━
 
-  sshx-cpy user@host[:port]      Install local pubkey on remote
+  sf-cpy user@host[:port]             Install local pubkey on remote
 
 ━━━ scpx — File Transfer over SCP ━━━━━━━━━━━━━━━━━━━━━━━━
 
   scpx push user@host:port <local_path> <remote_dir>
   scpx pull user@host:port <remote_path> <local_dir>
 
-━━━ git-auth — GitHub SSH Auth Check ━━━━━━━━━━━━━━━━━━━━━
+━━━ sf-git-auth — GitHub SSH Auth Check ━━━━━━━━━━━━━━━━━━
 
-  git-auth                       GitHub SSH authentication Automation
+  sf-git-auth                         GitHub SSH authentication automation
 
-━━━ sshx-reset — Reset SSH Keys ━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━ sf-reset — Reset SSH Environment ━━━━━━━━━━━━━━━━━━━━━
 
-  sshx-reset                     Remove and regenerate SSH keys
+  sf-reset                            Clean known_hosts + junk SSH files
 
 ━━━ GUI Shortcuts ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  Ctrl+Shift+C                   Copy selected text
-  Ctrl+Shift+V                   Paste
-  Ctrl+Shift+A                   Select all
-  Right-click                    Context menu (Copy/Paste/Select All)
+  Ctrl+Shift+C                        Copy selected text
+  Ctrl+Shift+V                        Paste
+  Ctrl+Shift+A                        Select all
+  Right-click                         Context menu (Copy/Paste/Select All)
 """
         dialog = Gtk.Dialog(title="Help — Command Reference", transient_for=self, flags=0)
         dialog.set_default_size(1800, 750)
@@ -609,14 +610,14 @@ class SSHXGUI(Gtk.Window):
         self.simple_input_popup(
             "Generate SSH Key",
             "Enter Email:",
-            lambda v: self.run_cmd([SSHX_KEY, v], "KeyGen"),
+            lambda v: self.run_cmd([SF_KEY, v], "KeyGen"),
         )
 
-    def sshx_copy_popup(self, button):
+    def sf_copy_popup(self, button):
         self.simple_input_popup(
-            "SSHX Copy",
+            "SF Copy",
             "Enter user@host[:port]:",
-            lambda v: self.run_cmd([SSHX_CPY, v], "SSHX Copy"),
+            lambda v: self.run_cmd([SF_CPY, v], "SF Copy"),
         )
 
     def simple_input_popup(self, title, label_text, callback):
@@ -783,5 +784,5 @@ class SSHXGUI(Gtk.Window):
 
 if __name__ == "__main__":
     apply_css()
-    win = SSHXGUI()
+    win = SSHForgeGUI()
     Gtk.main()

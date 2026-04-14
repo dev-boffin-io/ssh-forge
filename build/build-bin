@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # =========================================================
-# build-bin — Unified Go Builder for SSHX Suite
-# Author: Sumit
+# build-bin — Unified Go Builder for SSH Forge Suite
 # =========================================================
 
 set -Eeuo pipefail
@@ -30,14 +29,14 @@ BIN_DIR="$PROJECT_ROOT/bin"
 rm -rf "$BIN_DIR"
 mkdir -p "$BIN_DIR"
 
-# All binaries — source file → output binary name
+# output binary name → source file
 declare -A APPS=(
-    ["sshx"]="main.go"
+    ["ssh-forge"]="main.go"
     ["scpx"]="scpx.go"
-    ["sshx-key"]="sshx-key.go"
-    ["git-auth"]="git-auth.go"
-    ["sshx-cpy"]="sshx-cpy.go"
-    ["sshx-reset"]="sshx-reset.go"
+    ["sf-key"]="sf-key.go"
+    ["sf-git-auth"]="sf-git-auth.go"
+    ["sf-cpy"]="sf-cpy.go"
+    ["sf-reset"]="sf-reset.go"
 )
 
 # ==============================
@@ -64,11 +63,13 @@ echo -e "${BLUE}${BOLD}🚀 Host Architecture: $ARCH${NC}"
 echo -e "${CYAN}🧹 Cleaning Go build cache...${NC}"
 go clean -cache
 
-echo -e "${CYAN}🗑  Removing old go.mod / go.sum...${NC}"
-rm -f "$SRC_DIR/go.mod" "$SRC_DIR/go.sum"
-
-echo -e "${BLUE}⚙️  Initializing Go module...${NC}"
-(cd "$SRC_DIR" && go mod init github.com/dev-boffin-io/easy-ssh-dev && go mod tidy)
+if [[ ! -f "$SRC_DIR/go.mod" ]]; then
+    echo -e "${BLUE}⚙️  Initializing Go module...${NC}"
+    (cd "$SRC_DIR" && go mod init github.com/dev-boffin-io/ssh-forge && go mod tidy)
+else
+    echo -e "${CYAN}ℹ  go.mod exists — skipping init${NC}"
+    (cd "$SRC_DIR" && go mod tidy)
+fi
 
 echo -e "\n${YELLOW}${BOLD}🔨 Starting unified build...${NC}"
 echo -e "${CYAN}📦 Flags: -trimpath -ldflags='-s -w' CGO_ENABLED=0${NC}"

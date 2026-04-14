@@ -1,15 +1,14 @@
 # =========================================================
-# easy-ssh-dev Project Configuration
-# Author: Sumit
+# ssh-forge Project Configuration
 # =========================================================
 
 [project]
-name        = "easy-ssh-dev"
-version     = "1.1"
+name        = "ssh-forge"
+version     = "2.0"
 description = "Lightweight portable SSH management toolkit — CLI + GTK3 GUI"
 author      = "Sumit"
 license     = "MIT"
-repository  = "https://github.com/dev-boffin-io/easy-ssh-dev"
+repository  = "https://github.com/dev-boffin-io/ssh-forge"
 
 # -------------------------
 # Directory Layout
@@ -25,7 +24,7 @@ build_script = "build-install"
 installer    = "build/build-deps"
 log_file     = "install.log"
 
-cache        = "~/.ssh/sshx.json"
+cache        = "~/.ssh/ssh-forge.json"
 default_key  = "~/.ssh/id_ed25519"
 fallback_key = "~/.ssh/id_rsa"
 
@@ -34,14 +33,14 @@ fallback_key = "~/.ssh/id_rsa"
 # -------------------------
 
 [binaries]
-sshx       = "bin/sshx"
-sshx_key   = "bin/sshx-key"
-sshx_cpy   = "bin/sshx-cpy"
-sshx_reset = "bin/sshx-reset"
-git_auth   = "bin/git-auth"
-scpx       = "bin/scpx"
-sshx_dev   = "sshx-dev"
-sshx_gui   = "gui/sshx-gui"
+ssh_forge     = "bin/ssh-forge"
+sf_key        = "bin/sf-key"
+sf_cpy        = "bin/sf-cpy"
+sf_reset      = "bin/sf-reset"
+sf_git_auth   = "bin/sf-git-auth"
+scpx          = "bin/scpx"
+ssh_forge_dev = "ssh-forge-dev"
+ssh_forge_gui = "gui/ssh-forge-gui"
 
 # -------------------------
 # Build Scripts
@@ -64,7 +63,7 @@ ssh = "OpenSSH (ssh, ssh-keygen, ssh-copy-id, scp)"
 jq  = "JSON processor"
 
 [dependencies.optional]
-fzf = "Interactive fuzzy finder — used by sshx --menu"
+fzf = "Interactive fuzzy finder — used by ssh-forge --menu"
 
 [dependencies.gui]
 python = "3.8+"
@@ -80,11 +79,11 @@ gi     = "Python GObject Introspection (python3-gi)"
 auto_keygen         = true   # Generate ed25519 key if missing
 auto_key_copy       = true   # Run ssh-copy-id on first connect
 raw_connect         = true   # --raw skips cache and key-copy entirely
-cache_enabled       = true   # Save hosts to ~/.ssh/sshx.json
-known_hosts_cleanup = true   # sshx-reset clears known_hosts
+cache_enabled       = true   # Save hosts to ~/.ssh/ssh-forge.json
+known_hosts_cleanup = true   # sf-reset clears known_hosts
 ipv6_support        = true   # user@[::1]:port format
-injection_safe_copy = true   # sshx-cpy escapes shell quotes in authorized_keys
-syscall_exec        = true   # sshx connects via syscall.Exec (no subprocess overhead)
+injection_safe_copy = true   # sf-cpy escapes shell quotes in authorized_keys
+syscall_exec        = true   # ssh-forge connects via syscall.Exec (no subprocess overhead)
 
 [features.gui]
 enabled        = true

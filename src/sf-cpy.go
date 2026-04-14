@@ -15,7 +15,7 @@ const defaultPort = "22"
 
 func main() {
 	if len(os.Args) != 2 {
-		printError("Usage: sshx-cpy user@host[:port]")
+		printError("Usage: sf-cpy user@host[:port]")
 		os.Exit(1)
 	}
 

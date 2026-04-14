@@ -2,16 +2,16 @@
 gui/_internal/
 
 # Built GUI binary
-gui/sshx-gui
+gui/ssh-forge-gui
 
 # Built Go binaries
-bin/sshx
-sshx-dev
-bin/sshx-key
+bin/ssh-forge
+ssh-forge-dev
+bin/sf-key
 bin/scpx
-bin/git-auth
-bin/sshx-cpy  
-bin/sshx-reset
+bin/sf-cpy
+bin/sf-reset
+bin/sf-git-auth
 
 # Built lib binaries
 !/lib/

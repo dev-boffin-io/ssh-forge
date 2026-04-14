@@ -14,11 +14,11 @@ import (
 	"time"
 )
 
-const VERSION = "1.1"
+const VERSION = "2.0"
 
 var (
 	home, _ = os.UserHomeDir()
-	cache   = filepath.Join(home, ".ssh", "sshx.json")
+	cache   = filepath.Join(home, ".ssh", "ssh-forge.json")
 	key     = filepath.Join(home, ".ssh", "id_ed25519")
 
 	GREEN  = "\033[32m"
@@ -226,7 +226,7 @@ func remove(user, host string, port int) {
 	delete(m, keyStr)
 	saveCache(m)
 
-	ok("Removed entry from sshx cache")
+	ok("Removed entry from ssh-forge cache")
 }
 
 func list() {
@@ -272,25 +272,25 @@ func fzfMenu() {
 }
 
 func help() {
-	fmt.Printf(`sshx v%s — Simple SSH Manager
+	fmt.Printf(`ssh-forge v%s — Simple SSH Manager
 
 USAGE:
-  sshx user@ip:port
-  sshx user@[ipv6]:port
-  sshx user@ip:port --remove
-  sshx --raw user@ip:port
+  ssh-forge user@ip:port
+  ssh-forge user@[ipv6]:port
+  ssh-forge user@ip:port --remove
+  ssh-forge --raw user@ip:port
 
 OTHER:
-  sshx --list
-  sshx --menu
-  sshx --doctor
-  sshx --version | -v
-  sshx --help | -h
+  ssh-forge --list
+  ssh-forge --menu
+  ssh-forge --doctor
+  ssh-forge --version | -v
+  ssh-forge --help    | -h
 `, VERSION)
 }
 
 func doctor() {
-	fmt.Println("sshx v" + VERSION)
+	fmt.Println("ssh-forge v" + VERSION)
 
 	need("ssh")
 
@@ -319,7 +319,7 @@ func main() {
 	case "--help", "-h", "help":
 		help()
 	case "--version", "-v", "version":
-		fmt.Println("sshx v" + VERSION)
+		fmt.Println("ssh-forge v" + VERSION)
 	case "--list":
 		list()
 	case "--menu":
@@ -328,7 +328,7 @@ func main() {
 		doctor()
 	case "--raw":
 		if len(os.Args) < 3 {
-			die("Usage: sshx --raw user@ip:port")
+			die("Usage: ssh-forge --raw user@ip:port")
 		}
 		user, host, port := parse(os.Args[2])
 		rawConnect(user, host, port)

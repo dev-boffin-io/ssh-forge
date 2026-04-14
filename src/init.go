@@ -9,13 +9,13 @@ import (
 )
 
 var binaries = []string{
-	"bin/sshx",
-	"bin/sshx-key",
+	"bin/ssh-forge",
+	"bin/sf-key",
 	"bin/scpx",
-	"bin/sshx-cpy",
-	"bin/sshx-reset",
-	"bin/git-auth",
-	"gui/sshx-gui",
+	"bin/sf-cpy",
+	"bin/sf-reset",
+	"bin/sf-git-auth",
+	"gui/ssh-forge-gui",
 }
 
 // Check both locations during uninstall
@@ -114,8 +114,8 @@ func main() {
 
 func usage() {
 	fmt.Println("Usage:")
-	fmt.Println("  sshx-dev install")
-	fmt.Println("  sshx-dev uninstall")
+	fmt.Println("  ssh-forge-dev install")
+	fmt.Println("  ssh-forge-dev uninstall")
 }
 
 /* ===========================
@@ -136,19 +136,19 @@ func projectRoot() string {
 =========================== */
 
 func install() {
-	info("Installing easy-ssh-dev...")
+	info("Installing ssh-forge...")
 
 	baseDir := projectRoot()
 
 	// Create targetDir if missing (proot / termux fallback)
 	os.MkdirAll(targetDir, 0755)
 
-	guiPath := filepath.Join(baseDir, "gui/sshx-gui")
+	guiPath := filepath.Join(baseDir, "gui/ssh-forge-gui")
 	guiExists := fileExists(guiPath)
 
 	for _, bin := range binaries {
 
-		if bin == "gui/sshx-gui" && !guiExists {
+		if bin == "gui/ssh-forge-gui" && !guiExists {
 			info("GUI binary not found → skipping GUI install")
 			continue
 		}
@@ -187,7 +187,7 @@ func install() {
 =========================== */
 
 func uninstall() {
-	info("Uninstalling easy-ssh-dev...")
+	info("Uninstalling ssh-forge...")
 
 	removedAny := false
 
@@ -215,7 +215,7 @@ func uninstall() {
 	// Desktop entry
 	desktopFile := filepath.Join(
 		os.Getenv("HOME"),
-		".local/share/applications/sshx-gui.desktop",
+		".local/share/applications/ssh-forge-gui.desktop",
 	)
 
 	if fileExists(desktopFile) {
@@ -266,9 +266,9 @@ func createDesktopEntry(baseDir string) {
 	desktopContent := fmt.Sprintf(`[Desktop Entry]
 Version=1.0
 Type=Application
-Name=SSHX
+Name=SSH Forge
 Comment=SSH GUI Manager for QEMU / VMs
-Exec=sshx-gui
+Exec=ssh-forge-gui
 Icon=%s
 Terminal=false
 Categories=System;Network;
@@ -276,7 +276,7 @@ StartupNotify=true
 Path=%s
 `, iconPath, baseDir)
 
-	desktopFile := filepath.Join(desktopDir, "sshx-gui.desktop")
+	desktopFile := filepath.Join(desktopDir, "ssh-forge-gui.desktop")
 
 	if err := os.WriteFile(desktopFile, []byte(desktopContent), 0755); err != nil {
 		fail("Failed creating desktop entry: " + err.Error())

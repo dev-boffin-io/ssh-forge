@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-APP_NAME="sshx-gui"
+APP_NAME="ssh-forge-gui"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 GUI_DIR="$PROJECT_ROOT/gui"
@@ -176,7 +176,7 @@ run pyinstaller \
   --hidden-import=gi.repository.Vte \
   --collect-all gi \
   --add-data "$BIN_DIR:bin" \
-  easy-ssh-gui.py
+  ssh-forge-gui.py
 
 # -------------------------------------------------
 # 📦 Move binaries to gui/

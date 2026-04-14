@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# easy-ssh-dev — Production Dependency Installer
+# ssh-forge — Production Dependency Installer
 # Linux + Proot Stable Edition
 # Version: 1.1
 # Author: Sumit
@@ -37,7 +37,7 @@ INSTALL_CLI=false
 # ---------------- Usage ----------------
 
 usage() {
-  echo "easy-ssh-dev Installer v$VERSION"
+  echo "ssh-forge Installer v$VERSION"
   echo ""
   echo "Usage: $0 [options]"
   echo ""
@@ -84,7 +84,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_FILE="$PROJECT_ROOT/install.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo -e "${BLUE}🔧 easy-ssh-dev Dependency Installer v$VERSION${NC}"
+echo -e "${BLUE}🔧 ssh-forge Dependency Installer v$VERSION${NC}"
 echo "Project Root: $PROJECT_ROOT"
 echo "========================================================="
 echo "Started: $(date '+%A, %d %B %Y | %I:%M:%S %p')"

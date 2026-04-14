@@ -1,11 +1,10 @@
 # =========================================================
-# easy-ssh-dev Makefile
-# Author: Sumit
+# ssh-forge Makefile
 # =========================================================
 
 .DEFAULT_GOAL := help
 
-APP=sshx-dev
+APP=ssh-forge-dev
 BUILD_SCRIPT=./build-install
 DEPS_SCRIPT=./build/build-deps
 
@@ -15,7 +14,7 @@ DEPS_SCRIPT=./build/build-deps
 # ---------------------------------------------------------
 # NOTE:
 # install target requires prebuilt binary:
-#   ./sshx-dev
+#   ./ssh-forge-dev
 #
 # Build first:
 #   make build
@@ -25,7 +24,7 @@ DEPS_SCRIPT=./build/build-deps
 
 help:
 	@echo ""
-	@echo "easy-ssh-dev Build System"
+	@echo "ssh-forge Build System"
 	@echo ""
 	@echo "Targets:"
 	@echo ""
@@ -42,7 +41,7 @@ help:
 	@echo "  make dry-run     Simulate build"
 	@echo ""
 	@echo "Install:"
-	@echo "  make install     Install binaries (requires prebuilt sshx-dev)"
+	@echo "  make install     Install binaries (requires prebuilt ssh-forge-dev)"
 	@echo "  make uninstall   Remove installation"
 	@echo ""
 	@echo "Maintenance:"
@@ -100,14 +99,14 @@ uninstall:
 
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -f bin/sshx \
-	      bin/sshx-key \
+	rm -f bin/ssh-forge \
+	      bin/sf-key \
 	      bin/scpx \
-	      bin/git-auth \
-	      bin/sshx-cpy \
-	      bin/sshx-reset \
-	      sshx-dev \
-	      gui/sshx-gui
+	      bin/sf-git-auth \
+	      bin/sf-cpy \
+	      bin/sf-reset \
+	      ssh-forge-dev \
+	      gui/ssh-forge-gui
 	rm -rf gui/_internal
 	@echo "✔ Clean complete"
 

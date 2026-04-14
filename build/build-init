@@ -21,7 +21,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SRC_DIR="$PROJECT_ROOT/src"
 
-APP_NAME="sshx-dev"
+APP_NAME="ssh-forge-dev"
 SOURCE_FILE="$SRC_DIR/init.go"
 OUTPUT_BIN="$PROJECT_ROOT/$APP_NAME"
 

@@ -24,8 +24,8 @@ func smartSSHCleanup() {
 
 	// 1️⃣ Protected files
 	protected := map[string]bool{
-		filepath.Join(sshPath, "id_ed25519"):     true,
-		filepath.Join(sshPath, "id_ed25519.pub"): true,
+		filepath.Join(sshPath, "id_ed25519"):      true,
+		filepath.Join(sshPath, "id_ed25519.pub"):  true,
 		filepath.Join(sshPath, "authorized_keys"): true,
 	}
 

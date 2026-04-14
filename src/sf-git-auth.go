@@ -34,7 +34,7 @@ func checkAuth() (bool, bool) {
 	output, _ := cmd.CombinedOutput()
 	outStr := string(output)
 
-	// ✅ Success detection (GitHub returns exit code 1 on success)
+	// Success detection (GitHub returns exit code 1 on success)
 	if strings.Contains(outStr, "successfully authenticated") ||
 		(strings.Contains(outStr, "Hi ") && strings.Contains(outStr, "GitHub")) {
 
@@ -44,14 +44,14 @@ func checkAuth() (bool, bool) {
 
 	printError("SSH Authentication failed.")
 
-	// 🔍 Detect existing local key
+	// Detect existing local key
 	if detectLocalKey() {
 		printInfo("Local SSH key found.")
 	} else {
 		printWarning("No local SSH key detected.")
 	}
 
-	// 🧠 Detect SSH agent
+	// Detect SSH agent
 	if detectSSHAgent() {
 		printInfo("SSH Agent is running.")
 	} else {
@@ -60,7 +60,7 @@ func checkAuth() (bool, bool) {
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print(colorCyan("Run 'sshx-key' to generate and copy SSH key? (y/n): "))
+	fmt.Print(colorCyan("Run 'sf-key' to generate and copy SSH key? (y/n): "))
 	input := readInput(reader)
 
 	if input != "y" && input != "yes" {
@@ -101,7 +101,7 @@ func checkAuth() (bool, bool) {
 }
 
 ////////////////////////////////////////////////////////////
-// 🔄 Spinner
+// Spinner
 ////////////////////////////////////////////////////////////
 
 func runSpinner(duration time.Duration) {
@@ -127,7 +127,7 @@ func runSpinner(duration time.Duration) {
 }
 
 ////////////////////////////////////////////////////////////
-// 🔍 Local SSH Key Detection
+// Local SSH Key Detection
 ////////////////////////////////////////////////////////////
 
 func detectLocalKey() bool {
@@ -151,7 +151,7 @@ func detectLocalKey() bool {
 }
 
 ////////////////////////////////////////////////////////////
-// 🧠 SSH Agent Detection
+// SSH Agent Detection
 ////////////////////////////////////////////////////////////
 
 func detectSSHAgent() bool {
@@ -161,13 +161,13 @@ func detectSSHAgent() bool {
 }
 
 ////////////////////////////////////////////////////////////
-// 🔑 Run sshx-key
+// Run sf-key
 ////////////////////////////////////////////////////////////
 
 func runKeySetup(email string) bool {
-	keyTool, err := exec.LookPath("sshx-key")
+	keyTool, err := exec.LookPath("sf-key")
 	if err != nil {
-		printError("'sshx-key' not found in PATH.")
+		printError("'sf-key' not found in PATH.")
 		return false
 	}
 
@@ -180,7 +180,7 @@ func runKeySetup(email string) bool {
 	setupCmd.Env = os.Environ()
 
 	if err := setupCmd.Run(); err != nil {
-		printError(fmt.Sprintf("Error running sshx-key: %v", err))
+		printError(fmt.Sprintf("Error running sf-key: %v", err))
 		return false
 	}
 
@@ -188,7 +188,7 @@ func runKeySetup(email string) bool {
 }
 
 ////////////////////////////////////////////////////////////
-// 🌐 Browser
+// Browser
 ////////////////////////////////////////////////////////////
 
 func openBrowser(url string) {
@@ -217,7 +217,7 @@ func openBrowser(url string) {
 }
 
 ////////////////////////////////////////////////////////////
-// 🎨 Colored Output Helpers
+// Colored Output Helpers
 ////////////////////////////////////////////////////////////
 
 func colorRed(s string) string    { return "\033[31m" + s + "\033[0m" }
@@ -231,7 +231,7 @@ func printWarning(msg string) { fmt.Println(colorYellow("⚠ " + msg)) }
 func printInfo(msg string)    { fmt.Println(colorCyan("➜ " + msg)) }
 
 ////////////////////////////////////////////////////////////
-// 📢 Message
+// Message
 ////////////////////////////////////////////////////////////
 
 func showActionMessage() {
